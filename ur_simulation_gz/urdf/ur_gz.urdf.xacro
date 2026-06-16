@@ -86,4 +86,8 @@
     tf_prefix="$(arg tf_prefix)"
     transmission_hw_interface="$(arg transmission_hw_interface)"
   />
+
+  <!-- Add Camera-->
+  <xacro:include filename="camera.xacro" />
+
 </robot>
