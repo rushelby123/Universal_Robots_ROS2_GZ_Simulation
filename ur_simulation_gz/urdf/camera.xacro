@@ -16,6 +16,8 @@
     <xacro:property name="distortion_k2" value="0.01" />
     <xacro:property name="focal_length"  value="525" /> 
     
+    <material name="red"><color rgba="1 0 0 1"/></material>
+    
     <joint name="${camera_name}_joint" type="fixed">
         <parent link="tool0"/>
         <child link="${camera_name}_link"/>
