@@ -148,6 +148,15 @@ def launch_setup(context, *args, **kwargs):
         condition=UnlessCondition(activate_joint_controller),
     )
 
+    # ------------------------------------------------------------------
+    # Gripper Controller
+    # ------------------------------------------------------------------
+    gripper_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["gripper_controller", "--controller-manager", "/controller_manager"],
+        )
+
     # GZ nodes
     gz_spawn_entity = Node(
         package="ros_gz_sim",
@@ -194,6 +203,7 @@ def launch_setup(context, *args, **kwargs):
         robot_state_publisher_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
+        gripper_controller_spawner,
         initial_joint_controller_spawner_stopped,
         initial_joint_controller_spawner_started,
         gz_spawn_entity,

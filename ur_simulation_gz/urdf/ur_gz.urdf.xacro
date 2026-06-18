@@ -90,4 +90,7 @@
   <!-- Add Camera-->
   <xacro:include filename="camera.xacro" />
 
+  <!-- Add Gripper-->
+  <xacro:include filename="gripper.xacro" />
+
 </robot>

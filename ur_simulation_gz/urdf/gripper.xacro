@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ur10e_robotiq">
+
+ <!-- Include Robotiq 2F-140 -->
+ <xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_140_macro.urdf.xacro"/>
+
+ <!-- Instantiate gripper -->
+ <xacro:robotiq_gripper 
+    name="gripper" 
+    prefix="" 
+    parent="tool0" 
+    use_fake_hardware="false" 
+    sim_gazebo="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+ </xacro:robotiq_gripper>
+
+</robot>
