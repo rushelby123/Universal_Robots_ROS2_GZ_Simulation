@@ -34,6 +34,7 @@ from launch.actions import (
     IncludeLaunchDescription,
     OpaqueFunction,
     RegisterEventHandler,
+    AppendEnvironmentVariable,
 )
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
@@ -66,6 +67,10 @@ def launch_setup(context, *args, **kwargs):
     rviz_config_file = LaunchConfiguration("rviz_config_file")
     gazebo_gui = LaunchConfiguration("gazebo_gui")
     world_file = LaunchConfiguration("world_file")
+    set_gz_resource_path = AppendEnvironmentVariable(
+        name='GZ_SIM_RESOURCE_PATH',
+        value=PathJoinSubstitution([FindPackageShare('robotiq_description'), '..']),
+    )
 
     robot_description_content = Command(
         [
@@ -200,6 +205,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     nodes_to_start = [
+        set_gz_resource_path,
         robot_state_publisher_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
