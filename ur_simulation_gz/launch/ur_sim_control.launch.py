@@ -47,7 +47,7 @@ from launch.substitutions import (
     IfElseSubstitution,
 )
 from launch_ros.actions import Node
-from launch_ros.parameter_descriptions import ParameterFile
+from launch_ros.parameter_descriptions import ParameterFile, ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -100,7 +100,16 @@ def launch_setup(context, *args, **kwargs):
             controllers_file,
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
+    # Declared as a string rather than left for launch to infer: launch runs
+    # an un-typed parameter value through a YAML parse, and a URDF is only
+    # accidentally valid YAML. Anything in the description that YAML reads as
+    # structure -- a colon followed by a space inside an XML comment is enough
+    # -- otherwise fails the whole launch with "Unable to parse the value of
+    # parameter robot_description as yaml", pointing at the parameter rather
+    # than at the comment that actually broke it.
+    robot_description = {
+        "robot_description": ParameterValue(robot_description_content, value_type=str)
+    }
 
     robot_state_publisher_node = Node(
         package="robot_state_publisher",

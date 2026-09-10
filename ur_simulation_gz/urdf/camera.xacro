@@ -33,10 +33,23 @@
         </visual>
     </link>
 
+    <!-- Rotation from the body frame (camera_link, which is what the Gazebo
+         sensor renders from, +X forward along the boresight) to the ROS
+         optical frame per REP 103 (camera_link_optical, +Z forward, +X
+         right, +Y down). Without it the two frames coincide, so anything
+         treating camera_link_optical as an optical frame is off by 90
+         degrees on two axes and aims the camera sideways instead of where
+         it should look. That is what the behavior tree nodes aiming the
+         camera use.
+         Note that the sensor data below is NOT tagged with this frame. What
+         Gazebo puts on the wire (points in particular) is in the body
+         convention, so it is labelled camera_link instead. Rotating this
+         frame is about aiming the arm; labelling the data is about reading
+         what comes back, and the two want different frames here. -->
     <joint name="${camera_name}_optical_joint" type="fixed">
         <parent link="${camera_name}_link"/>
         <child link="${camera_name}_link_optical"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
     </joint>
 
     <link name="${camera_name}_link_optical"></link>
@@ -50,7 +63,11 @@
             <update_rate>${update_rate}</update_rate>
             <visualize>true</visualize>
             <topic>${camera_name}</topic>
-            <gz_frame_id>${camera_name}_link_optical</gz_frame_id>
+            <!-- camera_link, not camera_link_optical. Gazebo publishes the
+                 point cloud in this sensor body frame (+X forward), so the
+                 data has to be labelled with a frame that follows the same
+                 convention or it lands rotated 90 degrees in RViz. -->
+            <gz_frame_id>${camera_name}_link</gz_frame_id>
             
             <camera>
                 <horizontal_fov>${horizontal_fov}</horizontal_fov>
